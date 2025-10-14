@@ -1,6 +1,12 @@
 # This example requires the 'message_content' intent.
 
 import discord
+import json
+with open("config.json") as f:
+    data = json.load(f)
+    token = data["TOKEN"]
+
+
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -13,4 +19,4 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = MyClient(intents=intents)
-client.run('my token goes here')
+client.run(token)
