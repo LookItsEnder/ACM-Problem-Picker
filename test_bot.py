@@ -1,10 +1,12 @@
 # This example requires the 'message_content' intent.
 
+import os
 import discord
-import json
-with open("config.json") as f:
-    data = json.load(f)
-    token = data["TOKEN"]
+from dotenv import load_dotenv
+
+load_dotenv()
+token = os.getenv("TOKEN","")
+print(token)
 
 
 
