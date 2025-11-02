@@ -1,2 +1,4 @@
 *.json
 .env
+/ACM-env
+/__pycache__
