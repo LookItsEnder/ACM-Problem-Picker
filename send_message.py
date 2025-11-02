@@ -19,22 +19,19 @@ bot = discord.Client(intents=intents)
 @bot.event
 async def on_ready():
     print(f"Logged onto discord as {bot.user.name}")
-    channel = bot.get_channel(channelID)
-    print(f"Sending problem message to {channel.name}")
-
     if not sendfilewithmessage.is_running():
         sendfilewithmessage.start()
 
-@tasks.loop(minutes=1)
+@tasks.loop(minutes=5)
 async def sendfilewithmessage():
-    """Sends a file with a weekly problem, will attach a file if the problem generated is from ICPC."""
+    """Sends a file with a message."""
 
     DAY = datetime.date.today().weekday()
     TIME = datetime.datetime.now()
-    if(DAY == 0 and TIME.hour == 12 and TIME.minute == 0):
+    if(DAY == 1):# and (TIME.hour == 12 and TIME.minute == 51)):
         mess = generateProblem()
 
-        file_path = mess[1]
+        file_path = mess[1]  # Replace with the actual path to your file
         message_content = mess[0]
         channel = bot.get_channel(channelID)
 
