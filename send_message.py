@@ -2,6 +2,7 @@
 import os
 from dotenv import load_dotenv
 import datetime
+from genProblem import generateProblem
 
 import discord
 from discord.ext import commands,tasks
@@ -20,29 +21,28 @@ async def on_ready():
     print(f"Logged onto discord as {bot.user.name}")
     if not sendfilewithmessage.is_running():
         sendfilewithmessage.start()
-        #send_periodic_message.start()
 
 @tasks.loop(minutes=5)
 async def sendfilewithmessage():
     """Sends a file with a message."""
-    file_path = 'Problems/2024A.pdf'  # Replace with the actual path to your file
-    message_content = "Here's the file you requested!"
-    channel = bot.get_channel(channelID)
 
-    try:
-        with open(file_path, 'rb') as f:
-            discord_file = discord.File(f, filename='WeeklyProblem.pdf') # You can specify a different filename for Discord
-            await channel.send(content=message_content, file=discord_file)
-    except FileNotFoundError:
-        await channel.send(f"Error: File not found at {file_path}")
-    except Exception as e:
-        await channel.send(f"An error occurred: {e}")
+    DAY = datetime.date.today().weekday()
+    TIME = datetime.datetime.now()
+    if(DAY == 1):# and (TIME.hour == 12 and TIME.minute == 51)):
+        mess = generateProblem()
 
-# async def send_periodic_message():
-#     channel = bot.get_channel(channelID)
-#     if channel:
-#         await channel.send(content="This is a periodic message!", file="Problems/2024A.pdf")
-#     else:
-#         print(f"Channel with ID {channelID} not found.")
+        file_path = mess[1]  # Replace with the actual path to your file
+        message_content = mess[0]
+        channel = bot.get_channel(channelID)
+
+        try:
+            with open(file_path, 'rb') as f:
+                discord_file = discord.File(f, filename='WeeklyProblem.pdf')
+                await channel.send(content=message_content, file=discord_file)
+        except FileNotFoundError:
+            print(f"{DAY}: No file needed!")
+            await channel.send(content=message_content)
+        except Exception as e:
+            await channel.send(f"An error occurred: {e}")
 
 bot.run(token)
