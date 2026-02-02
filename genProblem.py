@@ -11,7 +11,7 @@ def generateProblem():
         
         filepath: If an ICPC problem is chosen, this is the PDF filepath, Otherwise returns "".
     """
-    message = "Happy Monday Everyone!\nThis week's problem is "
+    message = "\nThis week's problem is "
     filepath = ""
     provider=random.randint(0,2)
     if(provider==0): #Leetcode
@@ -29,8 +29,7 @@ def generateProblem():
         message+=f"{df['title'][problem]} from the {year} ICPC World Finals!\nA PDF is attached!"
         filepath+=f"Problems/{year}/{df['id'][problem]}-{df['title'][problem]}.pdf"
     message+="\nGood Luck!"
-    #print(message)
-    #print(filepath)
+
     A = []
     A.append(message)
     A.append(filepath)

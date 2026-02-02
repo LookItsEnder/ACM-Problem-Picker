@@ -9,8 +9,8 @@ from discord.ext import commands,tasks
 
 load_dotenv()
 token = os.getenv("TOKEN","")
-channelID = int(os.getenv("CHANNEL",""))
-
+channelID = int(os.getenv("ACMCHANNEL",""))
+roleID = int(os.getenv("ACMROLE",""))
 
 intents = discord.Intents.default()
 intents.guilds = True
@@ -19,20 +19,28 @@ bot = discord.Client(intents=intents)
 @bot.event
 async def on_ready():
     print(f"Logged onto discord as {bot.user.name}")
+    channel = bot.get_channel(channelID)
+    guild = channel.guild
+    role = discord.Guild.get_role(guild,roleID)
+    
+    print(f"Sending problem message to {channel.name}, pinging role {role}")
     if not sendfilewithmessage.is_running():
         sendfilewithmessage.start()
 
-@tasks.loop(minutes=5)
-async def sendfilewithmessage():
-    """Sends a file with a message."""
 
+@tasks.loop(minutes=1)
+async def sendfilewithmessage():
+    """Sends a file with a weekly problem, will attach a file if the problem generated is from ICPC."""
     DAY = datetime.date.today().weekday()
     TIME = datetime.datetime.now()
-    if(DAY == 1):# and (TIME.hour == 12 and TIME.minute == 51)):
+    guild = bot.get_channel(channelID).guild
+    role = discord.Guild.get_role(guild,roleID)
+    #if(True):
+    if(DAY == 0 and TIME.hour == 12 and TIME.minute == 0):
         mess = generateProblem()
-
-        file_path = mess[1]  # Replace with the actual path to your file
-        message_content = mess[0]
+        file_path = mess[1]
+        message_content = f"Happy Monday <@&{role.id}>!"
+        message_content += mess[0]
         channel = bot.get_channel(channelID)
 
         try:
