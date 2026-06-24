@@ -1,20 +1,25 @@
 import os
 # import discord
-from  APITest.leetcodetest import has_user_solved
+from  LeetCodePlug.leetcodeplug import has_user_solved
 
 def addPlayer(name):
     FILE = "Data/playerdata.txt"
-    tmp=open(FILE,'w')
-    tmp.close
+    # tmp=open(FILE,'w')
+    # tmp.close
     with open(FILE,'r') as data:
         content = data.read()
         if name in content:
             return 0
-    data.close
-    with open(FILE, "w") as data:
-        data.write(name)
-    data.close
+
+    with open(FILE, "a") as data:
+        data.write(name + "\n")
+
     return 1
+
+def getPlayerList():
+    FILE = "Data/playerdata.txt"
+    
+
 
 name = input("Enter a Username: ")
 if(addPlayer(name)):
@@ -24,10 +29,18 @@ else:
     exit(1)
 
 # user = "Look_Its_Ender"          # Replace with target username
-problem = "total-waviness-of-numbers-in-range-i"         # Replace with target problem slug
+problem = "two-sum"         # Replace with target problem slug
 solved = has_user_solved(name, problem)
 
-if solved:
+if solved == 1:
     print(f"{name} has solved '{problem}' recently!")
 else:
-    print(f"{name} has not solved '{problem}' yet!")
+    match solved:
+        case 0:
+            print(f"{name} has not solved '{problem}' yet!")
+        case 1:
+            print(f"{name} has solved '{problem}' recently!")
+        case -1:
+            print(f"No recent submissions found or user '{name}' does not exist.")
+        case -2:
+            exit(-2)

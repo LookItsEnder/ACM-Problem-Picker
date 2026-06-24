@@ -19,32 +19,24 @@ def has_user_solved(username: str, problem_slug: str) -> bool:
     
     variables = {
         "username": username,
-        "limit": 2000
+        "limit": 5
     }
     
     try:
+        print(query)
         response = requests.post(url, json={"query": query, "variables": variables})
         response.raise_for_status()
         data = response.json()
         submissions = data.get("data", {}).get("recentSubmissionList", [])
-        #print(submissions)
+        print(submissions)
         if not submissions:
-            print(f"No recent submissions found or user '{username}' does not exist.")
-            return False
+            #No recent submissions found or user '{name}' does not exist.
+            return -1
         for sub in submissions:
             if sub["titleSlug"] == problem_slug and sub["statusDisplay"] == "Accepted":
-                return True
-        return False
+                return 1
+        return 0
     except requests.exceptions.RequestException as e:
         print(f"Network or API Error: {e}")
-        return False
+        return -2
 
-# --- Example Usage ---
-# user = "Look_Its_Ender"          # Replace with target username
-# problem = "two-sum"         # Replace with target problem slug
-# solved = has_user_solved(user, problem)
-
-# if solved:
-#     print(f"{user} has solved '{problem}' recently!")
-# else:
-#     print(f"{user} has not solved '{problem}' yet!")

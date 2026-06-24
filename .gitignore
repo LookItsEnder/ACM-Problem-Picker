@@ -2,3 +2,5 @@
 .env
 /ACM-env
 /__pycache__
+Data/playerdata.csv
+Data/playerdata.txt
