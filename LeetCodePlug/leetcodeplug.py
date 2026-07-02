@@ -19,16 +19,16 @@ def has_user_solved(username: str, problem_slug: str) -> bool:
     
     variables = {
         "username": username,
-        "limit": 5
+        "limit": 2000
     }
     
     try:
-        print(query)
+        #print(query)
         response = requests.post(url, json={"query": query, "variables": variables})
         response.raise_for_status()
         data = response.json()
         submissions = data.get("data", {}).get("recentSubmissionList", [])
-        print(submissions)
+        #print(submissions)
         if not submissions:
             #No recent submissions found or user '{name}' does not exist.
             return -1
