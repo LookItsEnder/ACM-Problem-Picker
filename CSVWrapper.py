@@ -56,4 +56,3 @@ def scorecheck(problem):
     with open(FILE, 'w',newline='') as csvfile:
         for x in data:
             csvfile.write(f"{x[0]},{x[1]}\n")
-

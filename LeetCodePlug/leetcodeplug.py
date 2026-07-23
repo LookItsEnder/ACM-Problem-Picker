@@ -19,11 +19,10 @@ def has_user_solved(username: str, problem_slug: str) -> bool:
     
     variables = {
         "username": username,
-        "limit": 2000
+        "limit": 5
     }
     
     try:
-        #print(query)
         response = requests.post(url, json={"query": query, "variables": variables})
         response.raise_for_status()
         data = response.json()
